@@ -53,3 +53,9 @@ $ terraform init
 $ terraform apply
 $ ./scritps/install_basic_server_configuration.sh
 ```
+
+## Teardown
+
+```
+$ terraform destroy
+```
