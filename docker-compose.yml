@@ -1,0 +1,41 @@
+services:
+  powerdns:
+    image: powerdns/pdns-auth-49:4.9.3
+    restart: unless-stopped
+    environment:
+      PDNS_AUTH_API_KEY: password
+    healthcheck:
+      test: ["CMD", "pdns_control", "rping"]
+      interval: 60s
+      start_period: 10s
+    ports:
+      - "2000:53/tcp"
+      - "2000:53/udp"
+      - "8081:8081"
+    volumes:
+      - powerdns_sqlite:/var/lib/powerdns/
+
+  powerdns_admin:
+    image: powerdnsadmin/pda-legacy:v0.4.2
+    environment:
+      POWERDNS_ADMIN_USERNAME: admin
+      POWERDNS_ADMIN_PASSWORD: password
+      POWERDNS_ADMIN_EMAIL: admin@example.com
+      SQLALCHEMY_DATABASE_URI: "sqlite:////data/powerdns-admin.db"
+      PDNS_API_URL: "http://powerdns:8081"
+      PDNS_API_KEY: "password"
+      PDNS_VERSION: "4.9.3"
+      SIGNUP_ENABLED: "false"
+    volumes:
+      - powerdns_admin_sqlite:/data/
+    ports:
+      - "9191:80"
+    depends_on:
+      powerdns:
+        condition: service_healthy
+
+volumes:
+  powerdns_sqlite:
+     name: ${COMPOSE_PROJECT_NAME}_powerdns_sqlite
+  powerdns_admin_sqlite:
+     name: ${COMPOSE_PROJECT_NAME}_powerdns_admin_sqlite
