@@ -51,7 +51,16 @@ $ mise trust
 $ mise install -y
 $ terraform init
 $ terraform apply
+$ source .envrc.sh # to fetch SERVER1_IP
 $ ./scritps/install_basic_server_configuration.sh
+$ ./scripts/apply_dns_records.sh
+```
+
+Now I check that the DNS server is responding correctly:
+
+```
+$ dig www.example.com @${SERVER1_IP} +short
+192.168.0.11
 ```
 
 ## Teardown
