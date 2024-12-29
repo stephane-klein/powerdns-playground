@@ -12,14 +12,14 @@ provider "powerdns" {
 }
 
 
-resource "powerdns_zone" "foobar" {
+resource "powerdns_zone" "example_com" {
     name        = "example2.com."
     kind        = "Native"
 }
 
-resource "powerdns_record" "www_example2_com" {
-    zone    = "example2.com."
-    name    = "www.example2.com."
+resource "powerdns_record" "www_example_com" {
+    zone    = powerdns_zone.example_com.name
+    name    = "www.example.com."
     type    = "A"
     ttl     = 300
     records = ["192.168.0.11"]
