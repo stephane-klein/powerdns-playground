@@ -6,14 +6,19 @@ terraform {
   }
 }
 
+variable "powerdns_ip" {
+  description = "Powerdns IP address"
+  type        = string
+}
+
 provider "powerdns" {
     api_key    = "password"
-    server_url = "http://51.15.223.53:8081"
+    server_url = "http://${var.powerdns_ip}:8081"
 }
 
 
 resource "powerdns_zone" "example_com" {
-    name        = "example2.com."
+    name        = "example.com."
     kind        = "Native"
 }
 
